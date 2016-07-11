@@ -1,55 +1,33 @@
 package com.company;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.SAXException;
+import java.util.Scanner;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
-
-public class Main {
+class Main {
 
     public static void main(String[] args) {
+        new Main().input();
+    }
 
+    private String keyboard(String message) {
+        System.out.print(message + ": ");
+        Scanner scan = new Scanner(System.in);
+        return scan.next();
+    }
 
-        try {
-
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser parser = factory.newSAXParser();
-
-            DefaultHandler handler = new DefaultHandler() {
-
-                boolean bworkername = false;
-
-                public void startElement(String uri, String localName, String qName, Attributes attributes) {
-                    if (qName.equalsIgnoreCase("worker")) {
-                        if (attributes.getValue("id").equalsIgnoreCase("1")) {
-                            bworkername = true;
-//                            System.out.println(attributes.getValue("id"));
-                        }
-                    }
-                }
-
-                public void characters(char[] chars, int start, int length) {
-                    if (bworkername) {
-                        System.out.println("Worker name: " + new String(chars, start, length));
-                        bworkername = false;
-                    }
-                }
-            };
-
-            File file = new File("/home/developer/company.xml");
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream, "UTF-8");
-            InputSource inputSource = new InputSource(reader);
-            inputSource.setEncoding("UTF-8");
-
-            parser.parse(inputSource, handler);
-        } catch ( ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+    private void input() {
+        String i = keyboard("Input 1 for SAX\n" +
+                "Input 2 for DOM\n" +
+                "Input 3 for JAXB\n" +
+                "Your choice");
+        if (i.equalsIgnoreCase("1")) {
+            SAX sax = new SAX();
+            sax.sax();
+        } else if (i.equalsIgnoreCase("2")) {
+            DOM dom = new DOM();
+            dom.dom();
+        } else if (i.equalsIgnoreCase("3")) {
+            JAXB jaxb = new JAXB();
+            jaxb.jaxb();
         }
     }
 }
